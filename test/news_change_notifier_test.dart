@@ -7,7 +7,7 @@ import 'package:mocktail/mocktail.dart';
 class MockNewsService extends Mock implements NewsService {}
 
 void main() {
-  late NewsChangeNotifier sut;
+  late NewsChangeNotifier sut; // system under testing
   late MockNewsService mockNewsService;
 
   setUp(() {
@@ -15,48 +15,38 @@ void main() {
     sut = NewsChangeNotifier(mockNewsService);
   });
 
-  test(
-    "initial values are correct",
-    () {
-      expect(sut.articles, []);
-      expect(sut.isLoading, false);
-    },
-  );
+  test("Initial variable is correct", () {
+    expect(sut.articles, []);
+    expect(sut.isLoading, false);
+  });
 
-  group('getArticles', () {
-    final articlesFromService = [
-      Article(title: 'Test 1', content: 'Test 1 content'),
-      Article(title: 'Test 2', content: 'Test 2 content'),
-      Article(title: 'Test 3', content: 'Test 3 content'),
+  group("get Articles", () {
+    final articles = [
+      Article(title: "Article 1", content: "Article 1 content"),
+      Article(title: "Article 2", content: "Article 2 content"),
+      Article(title: "Article 3", content: "Article 3 content"),
     ];
 
-    void arrangeNewsServiceReturns3Articles() {
+    test("get article", () async {
+      when(() => mockNewsService.getArticles())
+          .thenAnswer((invocation) async => articles);
+      await sut.getArticles();
+
+      verify(() => mockNewsService.getArticles()).called(1);
+    });
+
+    test("""check loading is true,
+    populate the article,
+    check loading is false""", () async {
       when(() => mockNewsService.getArticles()).thenAnswer(
-        (_) async => articlesFromService,
-      );
-    }
+          (invocation) async => articles); // like a function definition
+      final future = sut.getArticles();
+      expect(sut.isLoading, true);
 
-    test(
-      "gets articles using the NewsService",
-      () async {
-        arrangeNewsServiceReturns3Articles();
-        await sut.getArticles();
-        verify(() => mockNewsService.getArticles()).called(1);
-      },
-    );
+      await future;
+      expect(sut.articles, articles);
 
-    test(
-      """indicates loading of data,
-      sets articles to the ones from the service,
-      indicates that data is not being loaded anymore""",
-      () async {
-        arrangeNewsServiceReturns3Articles();
-        final future = sut.getArticles();
-        expect(sut.isLoading, true);
-        await future;
-        expect(sut.articles, articlesFromService);
-        expect(sut.isLoading, false);
-      },
-    );
+      expect(sut.isLoading, false);
+    });
   });
 }

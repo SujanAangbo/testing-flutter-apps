@@ -1,8 +1,10 @@
 # Flutter Testing Tutorial
 
-### Learn from :point_right: [this post](https://resocoder.com/flutter-testing-pt1) :point_left:.
+### Starter project from the [Flutter Education Membership](https://resocoder.com/fem).
 
-#### _Find more tutorials on [resocoder.com](https://resocoder.com)_
+Become a professional Flutter developer! Learn from in-depth tutorials like this one, be a part of a big Discord community with the same goals as you have, and participate in monthly live Q&As with the tutors!
+
+#### _Join to learn from premium tutorials like this on [resocoder.com/fem](https://resocoder.com/fem)_
 
 <br />
 <br />
